@@ -3,6 +3,8 @@ import bcrypt from'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { customAlphabet } from 'nanoid'; 
 import UserModel from "../../../Modle/UserModule.js";
+import dotenv from 'dotenv';
+dotenv.config();
 
 
 export const GetAuth = (req,res)=>{
@@ -34,34 +36,32 @@ export const Login = async (req, res) => {
   
       
       const CheckUser = await UserModel.findOne({
-        attributes: ["id", "Name", "Password", "Role"],
+        attributes: ["id", "Name","Password"],
         where: {
-          Email
+          Email,
         }
       });
   
-      
       if (!CheckUser) {
         return res.json({ message: "email or password is wrong" });
       }
   
-      
-      const Match = await bcrypt.compare(Password, CheckUser.Password);
+      const Match = await bcrypt.compare(Password,CheckUser.Password);
   
       
       if (!Match) {
         return res.status(400).json({ message: "Invalid data" });
       }
   
-      
-      const Token = jwt.sign({ id: CheckUser.id, role: CheckUser.Role }, process.env.LOGINSIG);
+      const Token = jwt.sign({ id: CheckUser.id},process.env.LOGINSIG);  
   
       
       return res.json({ message: "success", user: CheckUser, Token });
   
-    } catch (error) {
-      console.error(error); 
-      return res.status(500).json({ message: "Internal Server Error" });
+    } 
+    catch (error) {
+      console.error("Error: ", error);  
+      return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
   }
   
@@ -133,5 +133,9 @@ export const ForgotPassword = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+
+
+
 
  
