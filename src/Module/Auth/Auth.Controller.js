@@ -97,39 +97,36 @@ export const Login = async (req, res) => {
   
  
 
-export const ForgotPassword = async (req, res) => {
-  try {
-    const { Email, Password, code } = req.body;
-
-    const userResult = await pool.query(
-      `SELECT * FROM UserModel WHERE Email = $1`,
-      [Email]
-    );
-
-    const user = userResult.rows[0];
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    if (user.sendcode !== code) {
-      return res.status(400).json({ message: "Invalid code" });
-    }
-
-    const hashedPassword = await bcrypt.hash(Password, parseInt(process.env.SALTROUND));
-
-    await pool.query(
-      `UPDATE UserModel SET Password = $1 WHERE Email = $2`,
-      [hashedPassword, Email]
-    );
-
-    return res.status(200).json({ message: "Password updated successfully" });
-
-  } catch (error) {
-    console.error("Error during ForgotPassword:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
-};
+  // export const ForgotPassword = async (req, res) => {
+  //   try {
+  //     const { Email, Password, code } = req.body;
+  
+      
+  //     const user = await UserModel.findOne({ where: { Email } });
+  
+  //     if (!user) {
+  //       return res.status(404).json({ message: "User not found" });
+  //     }
+  
+     
+  //     if (user.SendCode !== code) {  
+  //       return res.status(400).json({ message: "Invalid code" });
+  //     }
+  
+     
+  //     const hashedPassword = await bcrypt.hash(Password, parseInt(process.env.SALTROUND));
+  
+      
+  //     user.Password = hashedPassword;
+  //     await user.save(); 
+  
+  //     return res.status(200).json({ message: "Password updated successfully" });
+  
+  //   } catch (error) {
+  //     console.error("Error: ", error);
+  //     return res.status(500).json({ message: "Internal Server Error", error: error.message });
+  //   }
+  // };
 
 
 
