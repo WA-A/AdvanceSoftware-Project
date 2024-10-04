@@ -5,8 +5,9 @@ const router = Router();
 router.get('/',AuthController.GetAuth);
 router.post('/signup',AuthController.Register);
 router.post('/signin',AuthController.Login);
-router.patch('/forgotpassword',AuthController.ForgotPassword);
 router.patch('/sendcode',AuthController.SendCode);
+router.patch('/forgotpassword',AuthController.ForgotPassword);
+
 
 
 export default router;

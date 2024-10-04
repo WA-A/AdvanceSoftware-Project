@@ -74,27 +74,24 @@ export const Login = async (req, res) => {
       
       const Code = customAlphabet('1234567890abcdef', 4)();
   
-      
-      const result = await pool.query(
-        `UPDATE UserModel 
-         SET SendCode = $1 
-         WHERE Email = $2 
-         RETURNING *`, 
-        [Code, Email]
+      const [updatedUser] = await UserModel.update(
+        { SendCode: Code }, 
+        {
+          where: { Email },
+          returning: true, 
+        }
       );
   
-     
-      const user = result.rows[0];
-  
-      if (!user) {
-        return res.status(400).json({ message: "email not found" });
+      if (updatedUser[0] === 0) {
+        return res.status(400).json({ message: "Email not found" });
       }
   
-      return res.status(200).json({ message: "success", user });
+      return res.status(200).json({ message: "Success", user: updatedUser[1],Code });
   
-    } catch (error) {
-      console.error("Error during SendCode:", error);
-      return res.status(500).json({ message: "Internal Server Error" });
+    } 
+    catch (error) {
+      console.error("Error: ", error);  
+      return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
   };
   
