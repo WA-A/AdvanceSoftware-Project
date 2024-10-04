@@ -19,7 +19,10 @@ const UserModel = sequelize.define('User',{
      Age:{
          type:DataTypes.INTEGER
      },
-    
+    //  SendCode:{
+    //     type:String,
+    //       default:null,
+    //    }
     },
     {
      timestamps:true,
