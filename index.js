@@ -1,5 +1,5 @@
 import express from 'express';
-import {initApp} from './src/module/AppRouter.js';
+import {initApp} from './src/AppRouter.js';
 const app = express();
 const PORT = process.env.PORT || 4000;
 initApp(app,express);

@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import * as AuthController from '../Auth/Auth.Controller.js';
-import { CheckEmail } from "../../../MiddleWare/CheckEmail.js"; 
-import { Validation } from "../../../MiddleWare/Validation.js";
+import { CheckEmail } from "../../MiddleWare/CheckEmail.js"; 
+import { Validation } from "../../MiddleWare/Validation.js";
 import * as schema from './Auth.Validation.js'
 
 const router = Router();

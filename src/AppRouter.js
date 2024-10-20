@@ -1,6 +1,6 @@
-import { ConnectDB } from '../../DB/Connection.js';
-import AuthRouter from './Auth/Auth.Router.js';
-import UserRouter from './User/User.Router.js';
+import { ConnectDB } from '../DB/Connection.js';
+import AuthRouter from './Module/Auth/Auth.Router.js';
+import UserRouter from './Module/User/User.Router.js';
 import cors from 'cors';
 
 export const initApp = (app,express)=>{
