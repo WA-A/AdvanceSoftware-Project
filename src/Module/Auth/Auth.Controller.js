@@ -13,10 +13,10 @@ export const GetAuth = (req,res)=>{
 
 export const Register = async (req,res)=>{
     try{
-        const {Name,Email,Password,Age}= req.body;
+        const {Name,Email,Password,Address,PhoneNumber}= req.body;
         const HashedPassword = bcrypt.hashSync(Password,parseInt(process.env.SALTROUND));
 
-        const InsertUser = await UserModel.create({Name,Email,Password:HashedPassword,Age}); // insert to table   == email:email,password:password,name:name  // key = name so write {email,password,name}
+        const InsertUser = await UserModel.create({Name,Email,Password:HashedPassword,Address,PhoneNumber}); // insert to table   == email:email,password:password,name:name  // key = name so write {email,password,name}
         const decoded = jwt.sign(token,process.env.CONFIRM_EMAILTOKEN);
 
         return res.json({message:"success",InsertUser,status: 201});
@@ -66,68 +66,62 @@ export const Login = async (req, res) => {
   }
   
   
-  
-  
-  export const SendCode = async (req, res) => {
+export const SendCode = async (req, res) => {
+    const { Email } = req.body;
+    const Code = customAlphabet('1234567890abcdef', 4)(); 
     try {
-      const { Email } = req.body;
-      
-      const Code = customAlphabet('1234567890abcdef', 4)();
-  
-      const [updatedUser] = await UserModel.update(
-        { SendCode: Code }, 
-        {
-          where: { Email },
-          returning: true, 
+        const [updatedRows, updatedUser] = await UserModel.update(
+            { SendCode: Code }, 
+            {
+                where: { Email }, 
+                returning: true,   
+            }
+        )
+        if (updatedRows === 0) {
+            return res.status(400).json({ message: "Email not found" });
         }
-      );
-  
-      if (updatedUser[0] === 0) {
-        return res.status(400).json({ message: "Email not found" });
-      }
-  
-      return res.status(200).json({ message: "Success", user: updatedUser[1],Code });
-  
-    } 
-    catch (error) {
-      console.error("Error: ", error);  
-      return res.status(500).json({ message: "Internal Server Error", error: error.message });
+        return res.status(200).json({ message: "Success", user: updatedUser[0] });
+        
+    } catch (error) {
+        console.error("Error: ", error);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
-  };
+}
+
   
  
 
-  export const ForgotPassword = async (req, res) => {
+  
+
+export const ForgotPassword = async (req, res) => {
     try {
-      const { Email, Password, code } = req.body;
-  
-      
-      const user = await UserModel.findOneAndUpdate({ where: { Email }});
-  
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-  
-     
-      if (user.SendCode !== code) {  
-        return res.status(400).json({ message: "Invalid code" });
-      }
-  
-     
-      const hashedPassword = await bcrypt.hash(Password, parseInt(process.env.SALTROUND));
-  
-      
-      user.Password = hashedPassword;
-      await user.save(); 
-  
-      return res.status(200).json({ message: "Password updated successfully" });
-  
+        const { Email, Password, code } = req.body;
+
+        const userResult = await UserModel.findOne({ where: { Email } });
+
+        if (!userResult) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (userResult.SendCode !== code) {
+            return res.status(400).json({ message: "Invalid code" });
+        }
+
+        const hashedPassword = await bcrypt.hash(Password, parseInt(process.env.SALTROUND));
+
+        await UserModel.update(
+            { Password: hashedPassword },
+            { where: { Email } }
+        );
+
+        return res.status(200).json({ message: "Password updated successfully" });
+
+    } catch (error) {
+        console.error("Error: ", error);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
-     catch (error) {
-      console.error("Error: ", error);
-      return res.status(500).json({ message: "Internal Server Error", error: error.message });
-    }
-  };
+};
+
 
 
 

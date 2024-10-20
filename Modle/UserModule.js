@@ -19,10 +19,29 @@ const UserModel = sequelize.define('User',{
      Age:{
          type:DataTypes.INTEGER
      },
-    //  SendCode:{
+     //  SendCode:{
     //     type:String,
     //       default:null,
-    //    }
+    //    },
+     Address: {
+        type: String,
+        required: true
+      },
+      PhoneNumber: {
+        type: String,
+        required: true
+      },
+      Rating: {
+        type: Number,
+        default: 0, // Start From Zero
+        min: 0,
+        max: 5
+      },
+      verificationStatus: {
+        type: Boolean,
+        default: false 
+      }
+    
     },
     {
      timestamps:true,

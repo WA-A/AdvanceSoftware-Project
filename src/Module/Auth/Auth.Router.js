@@ -8,9 +8,9 @@ const router = Router();
 
 router.get('/',AuthController.GetAuth);
 router.post('/signup',Validation(schema.RegisterSchema),CheckEmail,AuthController.Register);
-router.post('/signin',Validation(schema.RegisterSchema),AuthController.Login);
-router.patch('/sendcode',Validation(schema.RegisterSchema),AuthController.SendCode);
-router.patch('/forgetpassword',Validation(schema.RegisterSchema),AuthController.ForgotPassword);
+router.post('/signin',Validation(schema.LoginSchema),AuthController.Login);
+router.patch('/sendcode',Validation(schema.SendCodeSchema),AuthController.SendCode); 
+router.patch('/forgetpassword',Validation(schema.ForgetPasswordSchema),AuthController.ForgotPassword); 
 
 
 
