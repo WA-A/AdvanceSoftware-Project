@@ -19,10 +19,10 @@ const UserModel = sequelize.define('User',{
      Age:{
          type:DataTypes.INTEGER
      },
-     //  SendCode:{
-    //     type:String,
-    //       default:null,
-    //    },
+      SendCode:{
+        type:String,
+          default:null,
+       },
      Address: {
         type: String,
         required: true
@@ -40,8 +40,12 @@ const UserModel = sequelize.define('User',{
       verificationStatus: {
         type: Boolean,
         default: false 
-      }
-    
+      },
+      Role:{
+        type:String,
+        default:'User',
+        enum:['User','Admin'],
+     }, 
     },
     {
      timestamps:true,
