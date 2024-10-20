@@ -2,7 +2,7 @@ import { where } from "sequelize";
 import bcrypt from'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { customAlphabet } from 'nanoid'; 
-import UserModel from "../../../Modle/UserModule.js";
+import UserModel from "../../Modle/UserModule.js";
 import dotenv from 'dotenv';
 dotenv.config();
 

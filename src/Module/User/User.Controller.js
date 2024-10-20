@@ -1,4 +1,4 @@
-import UserModel from "../../../Modle/UserModule.js";
+import UserModel from "../../Modle/UserModule.js";
 
 
 export const Update = async (req,res)=>{
@@ -19,7 +19,12 @@ export const Update = async (req,res)=>{
     } 
  }
 
- export const Destroy = async (req,res)=>{
+ export const GetUsers = async (req,res)=>{
+
+ }
+
+
+ export const Delete = async (req,res)=>{
     const {id} = req.params;
     const user = await UserModel.destroy({
         where:{

@@ -4,5 +4,5 @@ const router = Router();
 
 //router.get('/getuser',UserController.GetUsers);
 router.put('/update/:id',UserController.Update);
-router.delete('/delete/:id',UserController.Destroy);
+router.delete('/delete/:id',UserController.Delete);
 export default router ;
