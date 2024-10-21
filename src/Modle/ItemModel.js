@@ -1,6 +1,7 @@
-import { Schema, model ,Types} from 'mongoose';
+import { sequelize } from'../../DB/Connection.js';
+import {  DataTypes } from'sequelize';
 
-const ItemSchema = new Schema({
+const ItemModel = sequelize.define('Item',{
     NameItem:{
         type:String,
        required:true,  
@@ -42,8 +43,8 @@ const ItemSchema = new Schema({
     },
     {
      timestamps:true,
-    });
+    }
+);
 
 
-const ItemModel = model('Item',ItemSchema); 
 export default ItemModel;
