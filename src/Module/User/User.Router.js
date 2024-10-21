@@ -6,6 +6,6 @@ const router = Router();
 
 
 router.get('/getuser',auth(EndPoints.GatUsers),UserController.GetUsers);
-
+router.get('/getdatauser',auth(EndPoints.UserData),UserController.GetDataUser);
 
 export default router ;
