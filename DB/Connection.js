@@ -8,12 +8,20 @@ export const sequelize = new Sequelize('freedb_AdvanceSoftwareProject','freedb_A
 
 
   export const ConnectDB = async()=>{
-    try{
-  //       return await sequelize.sync({alter:true, force:false}); // change for table
-   // force is make table empty
-  await sequelize.authenticate();
-  console.log("Connection to the database has been established successfully.");
-      }
+    
+      try {
+        await sequelize.authenticate(); 
+        console.log("Connection to the database has been established successfully.");
+
+    // force is make table empty
+    // change for table 
+        return await sequelize.sync({ alter: true ,force:false }); 
+        
+        
+  
+    }
+        
+      
       catch (error) {
         console.error("Error connecting to database:", error);
         return({ error: error.message });

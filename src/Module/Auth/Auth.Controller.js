@@ -80,7 +80,7 @@ export const SendCode = async (req, res) => {
         if (updatedRows === 0) {
             return res.status(400).json({ message: "Email not found" });
         }
-        return res.status(200).json({ message: "Success", user: updatedUser[0] });
+        return res.status(200).json({ message: "Success", user: updatedUser[0],Code });
         
     } catch (error) {
         console.error("Error: ", error);
