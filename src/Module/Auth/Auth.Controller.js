@@ -17,7 +17,7 @@ export const Register = async (req,res)=>{
         const HashedPassword = bcrypt.hashSync(Password,parseInt(process.env.SALTROUND));
 
         const InsertUser = await UserModel.create({Name,Email,Password:HashedPassword,Address,PhoneNumber}); // insert to table   == email:email,password:password,name:name  // key = name so write {email,password,name}
-        const decoded = jwt.sign(token,process.env.CONFIRM_EMAILTOKEN);
+        const token = jwt.sign({Email},process.env.CONFIRM_EMAILTOKEN);
 
         return res.json({message:"success",InsertUser,status: 201});
     }
