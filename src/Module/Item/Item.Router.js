@@ -7,5 +7,7 @@ const router = Router();
 
 router.post('/createitem',auth(EndPoints.CreateItem),ItemController.CreateItem);
 router.get('/getownitems',auth(EndPoints.GetItems),ItemController.GetOwnerItems);
+router.put('/updateitem/:idItem',auth(EndPoints.CreateItem),ItemController.UpdateItem);
+
 
 export default router ;
