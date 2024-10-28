@@ -15,6 +15,19 @@ export const CreateItem = async (req, res) => {
 
 
 
+// Get All Own Items
+export const GetOwnerItems = async (req, res) => {
+    const Owner = req.user.id; 
+
+    try {
+        const items = await ItemModel.findAll({ where: { Owner } });
+        res.status(200).json(items);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 
 
 
