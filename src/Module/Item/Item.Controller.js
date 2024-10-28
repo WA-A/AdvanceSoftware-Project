@@ -16,7 +16,7 @@ export const CreateItem = async (req, res) => {
 
 
 // Get All Own Items
-export const GetOwnerItems = async (req, res) => {
+export const GetItems = async (req, res) => {
     const Owner = req.user.id; 
 
     try {
@@ -57,6 +57,28 @@ export const UpdateItem = async (req, res) => {
 };
 
 
+// Delete Item
+
+export const DeleteItem = async (req, res) => {
+    const { idItem } = req.params; 
+    const Owner = req.user.id; 
+
+    try {
+       
+        const item = await ItemModel.findOne({ where: { idItem, Owner } });
+        
+        if (!item) {
+            return res.status(404).json({ message: "Item not found or you're not authorized to delete this item." });
+        }
+
+        
+        await item.destroy();
+
+        res.status(200).json({ message: "Item deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 
 
