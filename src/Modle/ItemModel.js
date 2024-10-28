@@ -25,26 +25,26 @@ const ItemModel = sequelize.define('Item',{
         enum: ['Available', 'Rented'],
         default: 'Available'
     },
-    DateAdded: {
+    RentalDays: {
         type: Date,
         default: Date.now
     },
      Image:{
       type:Object,
-      required:true,
      },
      Owner: {
-        type: ObjectId, // Relation with User Model
+        type: Number, // Relation with User Model
         ref: 'User', 
         required: true
     },
-     createdBy:{type:Types.ObjectId,ref:'User'},
-     updatedBy:{type:Types.ObjectId,ref:'User'},
+    //  createdBy:{type:Types.ObjectId,ref:'User'},
+    //  updatedBy:{type:Types.ObjectId,ref:'User'},
     },
     {
      timestamps:true,
     }
 );
+
 
 
 export default ItemModel;
