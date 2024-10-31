@@ -1,15 +1,20 @@
 import { Router } from "express";
+import multer from "multer";
 import * as ItemController from "./Item.Controller.js";
 import { auth } from "../../MiddleWare/auth.js";
 import { EndPoints } from "./Item.Role.js";
-import { Validation } from "../../MiddleWare/Validation.js";
+import { validateSchema, Validation } from "../../MiddleWare/Validation.js";
 import * as schema from "./Item.Validation.js";
+import { storage } from "../../MiddleWare/imageUpload.js";
+
 const router = Router();
+const upload = multer({ storage });
 
 router.post(
   "/createitem",
+  upload.single("image"),
   auth(EndPoints.CreateItem),
-  Validation(schema.CreateItemSchema),
+  validateSchema(schema.CreateItemSchema),
   ItemController.CreateItem
 );
 router.get("/getitems", auth(EndPoints.GetItems), ItemController.GetItems);

@@ -36,17 +36,16 @@ const ItemModel = sequelize.define(
     },
     RentalDays: {
       type: DataTypes.INTEGER,
-      allowNull: false, // Assuming this must not be null
+      allowNull: false,
     },
     Image: {
-      type: DataTypes.JSON,
+      type: DataTypes.STRING,
     },
     Owner: {
-      // Add this field to reference the user
       type: DataTypes.INTEGER,
-      allowNull: false, // Set to true if you want to enforce this
+      allowNull: false,
       references: {
-        model: "Users", // Adjust based on the actual name of your users table
+        model: "Users",
         key: "id",
       },
     },
@@ -57,52 +56,3 @@ const ItemModel = sequelize.define(
 );
 
 export default ItemModel;
-
-// import { sequelize } from'../../DB/Connection.js';
-// import {  DataTypes } from'sequelize';
-
-// const ItemModel = sequelize.define('Item',{
-//     NameItem:{
-//         type:String,
-//        required:true,
-//     },
-//     Description: {
-//         type: String,
-//         required: true,
-//      },
-//      Category: {
-//         type: String,
-//         required: true,
-//         enum: ['Tools', 'Sports Equipment', 'Electronics', 'Furniture', 'Vehicles', 'Others'],
-//         default: 'Others'
-//     },
-//     DailyPrice: {
-//         type: Number,
-//         required: true,
-//     },
-//     Status: {
-//         type: String,
-//         enum: ['Available', 'Rented'],
-//         default: 'Available'
-//     },
-//     RentalDays: {
-//         type: Date,
-//         default: Date.now
-//     },
-//      Image:{
-//       type:Object,
-//      },
-//      Owner: {
-//         type: Number, // Relation with User Model
-//         ref: 'User',
-//         required: true
-//     },
-//     //  createdBy:{type:Types.ObjectId,ref:'User'},
-//     //  updatedBy:{type:Types.ObjectId,ref:'User'},
-//     },
-//     {
-//      timestamps:true,
-//     }
-// );
-
-// export default ItemModel;

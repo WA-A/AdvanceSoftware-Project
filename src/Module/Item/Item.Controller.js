@@ -4,9 +4,20 @@ import ItemModel from "../../Modle/ItemModel.js";
 export const CreateItem = async (req, res) => {
   const { NameItem, Description, Category, DailyPrice, RentalDays } = req.body;
   const userId = req.user.id;
-  console.log("Request Body:", req.body);
-  console.log("User ID:", userId);
+
+  // Check if an image file is included
+  if (!req.file) {
+    return res.status(400).json({
+      message: "Validation error",
+      errors: [{ message: "Image file is required", path: "image" }],
+    });
+  }
+
   try {
+    // The file is already uploaded to Cloudinary through multer
+    const imageUrl = req.file.path; // Get the URL from req.file
+
+    // Create item in database
     const newItem = await ItemModel.create({
       NameItem,
       Description,
@@ -14,7 +25,9 @@ export const CreateItem = async (req, res) => {
       DailyPrice,
       RentalDays,
       Owner: userId,
+      Image: imageUrl, // Save the Cloudinary URL in DB
     });
+
     res.status(201).json({ message: "Success Add Item", newItem });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -43,11 +56,7 @@ export const UpdateItem = async (req, res) => {
 
   const { NameItem, Description, DailyPrice, RentalDays } = req.body;
 
-  console.log("Request Params:", req.params); // Logs `id`
-  console.log("User ID:", Owner); // Logs authenticated user ID
-
   try {
-    // First, check if the item exists with the given id and Owner
     const item = await ItemModel.findOne({
       where: {
         id: Number(id),
@@ -61,12 +70,11 @@ export const UpdateItem = async (req, res) => {
       });
     }
 
-    // Proceed with update if the item is found
-    const [updatedRowsCount, updatedItems] = await ItemModel.update(
+    const [updatedItems] = await ItemModel.update(
       { NameItem, Description, DailyPrice, RentalDays },
       {
         where: {
-          id: Number(id), // Ensure id is numeric
+          id: Number(id),
           Owner,
         },
         returning: true,
@@ -84,7 +92,6 @@ export const UpdateItem = async (req, res) => {
 };
 
 // Delete Item
-
 export const DeleteItem = async (req, res) => {
   const { id } = req.params;
   const Owner = req.user.id;
