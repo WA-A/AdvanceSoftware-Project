@@ -13,8 +13,8 @@ export const CreateReview = async (req, res) => {
     const newReview = await ReviewModel.create({
       ReviewText,
       Rating,
-      UserId: Number(userId),
-      ItemId: Number(itemId),
+      UserId: userId,
+      ItemId: itemId,
     });
 
     res.status(201).json({ message: "Success Review", newReview });
