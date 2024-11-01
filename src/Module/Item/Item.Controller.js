@@ -43,19 +43,11 @@ export const GetItems = async (req, res) => {
 
 // Update Own Item
 export const UpdateItem = async (req, res) => {
-    const { idItem } = req.params; 
-    const Owner = req.user.id; 
-    const { NameItem, Description, DailyPrice} = req.body; 
   console.log("Inside update controller");
 
   const { id } = req.params;
   const Owner = req.user.id;
-        
-        await item.update({
-            NameItem: NameItem || item.NameItem,
-            Description: Description || item.Description,
-            DailyPrice: DailyPrice || item.DailyPrice,
-        });
+
   const { NameItem, Description, DailyPrice, RentalDays } = req.body;
 
   try {
