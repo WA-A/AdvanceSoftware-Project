@@ -4,8 +4,6 @@ import ItemModel from "../../Modle/ItemModel.js";
 export const CreateItem = async (req, res) => {
   const { NameItem, Description, Category, DailyPrice, RentalDays } = req.body;
   const userId = req.user.id;
-
-  // Check if an image file is included
   if (!req.file) {
     return res.status(400).json({
       message: "Validation error",
@@ -14,10 +12,7 @@ export const CreateItem = async (req, res) => {
   }
 
   try {
-    // The file is already uploaded to Cloudinary through multer
-    const imageUrl = req.file.path; // Get the URL from req.file
-
-    // Create item in database
+    const imageUrl = req.file.path;
     const newItem = await ItemModel.create({
       NameItem,
       Description,
@@ -25,7 +20,7 @@ export const CreateItem = async (req, res) => {
       DailyPrice,
       RentalDays,
       Owner: userId,
-      Image: imageUrl, // Save the Cloudinary URL in DB
+      Image: imageUrl,
     });
 
     res.status(201).json({ message: "Success Add Item", newItem });
