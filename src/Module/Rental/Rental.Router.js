@@ -9,7 +9,8 @@ import { AsyncHandler } from '../../../Utls/CatchError.js';
 
 const router = Router();
 
-router.post("/createrental/:itemId",auth(EndPoints.CreateRental),RentalController.createRental);
+router.post("/createrental/:itemId",auth(EndPoints.CreateRental),RentalController.CreateRental);
+router.put("/updaterental/:rentalId",auth(EndPoints.CreateRental),RentalController.UpdateRental);
 
 
 
