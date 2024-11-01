@@ -16,7 +16,6 @@ export const CreateItemSchema = joi.object({
     )
     .required(),
   DailyPrice: joi.number().positive().required(),
-  RentalDays: joi.number().integer().positive().required(),
 });
 
 // Update Item Schema
@@ -24,5 +23,4 @@ export const UpdateItemSchema = joi.object({
   NameItem: joi.string().optional(),
   Description: joi.string().optional(),
   DailyPrice: joi.number().positive().optional(),
-  RentalDays: joi.number().integer().positive().optional(),
 });

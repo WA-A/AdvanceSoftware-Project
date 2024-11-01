@@ -2,38 +2,40 @@ import { sequelize } from'../../DB/Connection.js';
 import {  DataTypes } from'sequelize';
 
 const RentalModel = sequelize.define('Item',{
-    ItemId:{
-        type:Number,
-       required:true,  
-    },
     RentalDays: {
-        type: Number,
-        required: true,
+        type: DataTypes.INTEGER,
+        allowNull: false
     },
     RentalDate: {
-        type: Date,
-        default: Date.now
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
     },
-     ItemOwner: {
-        type: Number, // Relation with User Model
-        ref: 'User', 
-        required: true
+    ItemOwner: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'Users',
+            key: 'id'
+        }
     },
-    ItemTenant:{
-        type: Number, // Relation with User Model
-        ref: 'User', 
-        required: true
+    ItemTenant: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'Users',
+            key: 'id'
+        }
     },
     finalCost: {
-        type: Number,
-        required: true,
-        min: 0,
+        type: DataTypes.FLOAT,
+        allowNull: false,
+        validate: {
+            min: 0
+        }
     }
-    },
-    {
-     timestamps:true,
-    }
-);
+}, {
+    timestamps: true
+});
 
 
 
