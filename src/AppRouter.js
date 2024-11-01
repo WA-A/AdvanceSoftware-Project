@@ -3,6 +3,7 @@ import AuthRouter from "./Module/Auth/Auth.Router.js";
 import UserRouter from "./Module/User/User.Router.js";
 import ItemRouter from "./Module/Item/Item.Router.js";
 import ReviewRouter from "./Module/Reviews/Review.Router.js";
+import RentalRouter from "./Module/Rental/Rental.Router.js";
 
 import cors from "cors";
 
@@ -17,6 +18,7 @@ export const initApp = (app, express) => {
   app.use("/auth", AuthRouter);
   app.use("/user", UserRouter);
   app.use("/item", ItemRouter);
+  app.use("/rental", RentalRouter);
   app.use("/review", ReviewRouter);
 
   app.use("*", (req, res) => {
