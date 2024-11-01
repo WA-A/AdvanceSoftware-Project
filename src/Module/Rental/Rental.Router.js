@@ -9,8 +9,8 @@ import { AsyncHandler } from '../../../Utls/CatchError.js';
 
 const router = Router();
 
-router.post("/createrental/:itemId",auth(EndPoints.CreateRental),RentalController.CreateRental);
-router.put("/updaterental/:rentalId",auth(EndPoints.CreateRental),RentalController.UpdateRental);
+router.post("/createrental/:itemId",Validation(schema.CreateRentalSchema),auth(EndPoints.CreateRental),RentalController.CreateRental);
+router.put("/updaterental/:rentalId",Validation(schema.UpdateRentalSchema),auth(EndPoints.CreateRental),RentalController.UpdateRental);
 router.get("/getrental",auth(EndPoints.CreateRental),RentalController.GetUserRentals);
 router.delete("/deleterental/:RentalId",auth(EndPoints.CreateRental),RentalController.DeleteRental);
 
