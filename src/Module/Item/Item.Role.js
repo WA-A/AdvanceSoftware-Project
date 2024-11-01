@@ -1,7 +1,6 @@
-import {Roles} from '../../MiddleWare/auth.js'
-
+import { Roles } from "../../MiddleWare/auth.js";
 
 export const EndPoints = {
-    CreateItem : [Roles.Admin],
-    GetItems : [Roles.Admin , Roles.User],
- }
+  CreateItem: [Roles.Admin],
+  GetItems: [Roles.Admin, Roles.User],
+};

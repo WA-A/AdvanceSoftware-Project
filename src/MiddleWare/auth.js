@@ -1,45 +1,42 @@
-import jwt from 'jsonwebtoken';
-import UserModel from './../Modle/UserModule.js'; 
+import jwt from "jsonwebtoken";
+import UserModel from "./../Modle/UserModule.js";
 
 export const Roles = {
-    Admin: 'Admin',
-    User: 'User'
-}
+  Admin: "Admin",
+  User: "User",
+};
 
 export const auth = (AccessRole = []) => {
-    return async (req, res, next) => {
-        const { authorization } = req.headers;
+  return async (req, res, next) => {
+    const { authorization } = req.headers;
 
-        if (!authorization || !authorization.startsWith(process.env.BEARERKEY)) {
-            return next(new Error(`Invalid token`, 401));
-        }
-
-        const token = authorization.split(process.env.BEARERKEY)[1];
-
-        let decoded;
-        try {
-            decoded = jwt.verify(token, process.env.LOGINSIG);
-        } catch (error) {
-            return res.status(400).json({ message: "Invalid authorization" });
-        }
-
-        try {
-            const authUser = await UserModel.findByPk(decoded.id, {
-                attributes: ['Name', 'Role'] 
-            });
-
-            if (!authUser) {
-                return res.status(404).json({ message: 'User Not found' });
-            }
-
-            if (!AccessRole.includes(authUser.Role)) {
-                return res.status(403).json({ message: "Not authorized User" });
-            }
-
-            req.user = authUser;
-            next();
-        } catch (error) {
-            return res.status(500).json({ message: "Internal server error", error: error.message });
-        }
+    if (!authorization || !authorization.startsWith(process.env.BEARERKEY)) {
+      return res
+        .status(401)
+        .json({ message: "Token missing or incorrect format" });
     }
-}
+
+    const token = authorization.replace(process.env.BEARERKEY, "").trim();
+
+    try {
+      const decoded = jwt.verify(token, process.env.LOGINSIG);
+      const authUser = await UserModel.findByPk(decoded.id, {
+        attributes: ["Name", "Role", "id"],
+      });
+
+      if (!authUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      if (!AccessRole.includes(authUser.Role)) {
+        return res.status(403).json({ message: "Not authorized user" });
+      }
+
+      req.user = authUser;
+      console.log("Authenticated User:", req.user);
+      next();
+    } catch (error) {
+      return res.status(400).json({ message: "Invalid authorization" });
+    }
+  };
+};
