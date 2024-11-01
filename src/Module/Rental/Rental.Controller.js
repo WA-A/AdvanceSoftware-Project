@@ -92,4 +92,18 @@ export const GetUserRentals = async (req, res) => {
 
 
 
+// Delete Rental 
+export const DeleteRental = async (req, res) => {
+    try {
+        const { RentalId } = req.params;
+        const rental = await RentalModel.findById(RentalId);
+        if (!rental) {
+            return res.status(404).json({ message: "Rental not found" });
+        }
 
+        await rental.destroy();
+        res.status(200).json({ message: "Rental deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting rental", error });
+    }
+};
