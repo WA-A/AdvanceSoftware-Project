@@ -2,7 +2,6 @@ import ItemModel from "../../Modle/ItemModel.js";
 
 // Create New Item
 export const CreateItem = async (req, res) => {
-<<<<<<< HEAD
     const {NameItem,Description,Category,DailyPrice} = req.body
     const Owner = req.user.id;
     try {
@@ -12,7 +11,6 @@ export const CreateItem = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 }
-=======
   const { NameItem, Description, Category, DailyPrice, RentalDays } = req.body;
   const userId = req.user.id;
   if (!req.file) {
@@ -21,8 +19,6 @@ export const CreateItem = async (req, res) => {
       errors: [{ message: "Image file is required", path: "image" }],
     });
   }
->>>>>>> 651d8562b06240131b2e6abacdc5ec3922fada79
-
   try {
     const imageUrl = req.file.path;
     const newItem = await ItemModel.create({
@@ -56,27 +52,20 @@ export const GetItems = async (req, res) => {
 
 // Update Own Item
 export const UpdateItem = async (req, res) => {
-<<<<<<< HEAD
     const { idItem } = req.params; 
     const Owner = req.user.id; 
     const { NameItem, Description, DailyPrice} = req.body; 
-=======
   console.log("Inside update controller");
->>>>>>> 651d8562b06240131b2e6abacdc5ec3922fada79
 
   const { id } = req.params;
   const Owner = req.user.id;
-
-<<<<<<< HEAD
         
         await item.update({
             NameItem: NameItem || item.NameItem,
             Description: Description || item.Description,
             DailyPrice: DailyPrice || item.DailyPrice,
         });
-=======
   const { NameItem, Description, DailyPrice, RentalDays } = req.body;
->>>>>>> 651d8562b06240131b2e6abacdc5ec3922fada79
 
   try {
     const item = await ItemModel.findOne({
