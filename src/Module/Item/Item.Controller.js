@@ -10,7 +10,6 @@ export const CreateItem = async (req, res) => {
       errors: [{ message: "Image file is required", path: "image" }],
     });
   }
-  //
   try {
     const imageUrl = req.file.path;
     const newItem = await ItemModel.create({
