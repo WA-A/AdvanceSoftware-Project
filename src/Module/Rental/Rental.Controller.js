@@ -58,8 +58,38 @@ export const UpdateRental = async (req, res) => {
     }
 };
 
-// Get Rental Own Tenant
+// Get Rental 
 
-// Get Rental Own Ownar
 
-// Delete Rental 
+export const GetUserRentals = async (req, res) => {
+    try {
+        const userId = req.user.id; 
+
+       
+        const rentals = await RentalModel.findAll({
+            where: {
+                [Op.or]: [ // ملاحظة : الفكرة انه اذا المستخدم الي عامل لوج ان هو يوزر بجيب كل عمليات الايجار الي هو عملهم 
+                    // اما اذا كان الي عامل لوج ان هو المالك بجيب العناصر الي تم استئجاره منه
+                    { ItemOwner: userId },
+                    { ItemTenant: userId }
+                ]
+            },
+            include: [
+                { model: ItemModel, as: 'item' } 
+            ]
+        });
+
+        if (rentals.length === 0) {
+            return res.status(404).json({ message: "No rentals found for this user" });
+        }
+
+        
+        res.status(200).json(rentals);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching rentals for user", error });
+    }
+};
+
+
+
+
