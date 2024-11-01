@@ -3,10 +3,10 @@ import ItemModel from "../../Modle/ItemModel.js";
 
 // Create New Item 
 export const CreateItem = async (req, res) => {
-    const {NameItem,Description,Category,DailyPrice,RentalDays} = req.body
+    const {NameItem,Description,Category,DailyPrice} = req.body
     const Owner = req.user.id;
     try {
-        const newItem = await ItemModel.create({NameItem,Description,Category,DailyPrice,RentalDays});
+        const newItem = await ItemModel.create({NameItem,Description,Category,DailyPrice});
         res.status(201).json({message:"Success Add Item",newItem});
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -32,7 +32,7 @@ export const GetItems = async (req, res) => {
 export const UpdateItem = async (req, res) => {
     const { idItem } = req.params; 
     const Owner = req.user.id; 
-    const { NameItem, Description, DailyPrice, RentalDays} = req.body; 
+    const { NameItem, Description, DailyPrice} = req.body; 
 
     try {
         
@@ -47,7 +47,6 @@ export const UpdateItem = async (req, res) => {
             NameItem: NameItem || item.NameItem,
             Description: Description || item.Description,
             DailyPrice: DailyPrice || item.DailyPrice,
-            RentalDays: RentalDays || item.RentalDays,
         });
 
         res.status(200).json({ message: "Item updated successfully", item });
