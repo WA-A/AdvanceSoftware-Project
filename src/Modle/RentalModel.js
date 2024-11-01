@@ -26,7 +26,7 @@ const RentalModel = sequelize.define('Item',{
             key: 'id'
         }
     },
-    finalCost: {
+    FinalCost: {
         type: DataTypes.FLOAT,
         allowNull: false,
         validate: {
