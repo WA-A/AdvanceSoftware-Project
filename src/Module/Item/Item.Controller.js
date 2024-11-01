@@ -2,7 +2,7 @@ import ItemModel from "../../Modle/ItemModel.js";
 
 // Create New Item
 export const CreateItem = async (req, res) => {
-  const { NameItem, Description, Category, DailyPrice, RentalDays } = req.body;
+  const { NameItem, Description, Category, DailyPrice } = req.body;
   const userId = req.user.id;
   if (!req.file) {
     return res.status(400).json({
@@ -17,7 +17,7 @@ export const CreateItem = async (req, res) => {
       Description,
       Category,
       DailyPrice,
-      RentalDays,
+      //RentalDays,
       Owner: userId,
       Image: imageUrl,
     });
@@ -48,7 +48,7 @@ export const UpdateItem = async (req, res) => {
   const { id } = req.params;
   const Owner = req.user.id;
 
-  const { NameItem, Description, DailyPrice, RentalDays } = req.body;
+  const { NameItem, Description, DailyPrice } = req.body;
 
   try {
     const item = await ItemModel.findOne({
@@ -65,7 +65,7 @@ export const UpdateItem = async (req, res) => {
     }
 
     const [updatedItems] = await ItemModel.update(
-      { NameItem, Description, DailyPrice, RentalDays },
+      { NameItem, Description, DailyPrice },
       {
         where: {
           id: Number(id),
