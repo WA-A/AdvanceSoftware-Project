@@ -18,6 +18,7 @@ export const initApp = (app, express) => {
   app.use("/auth", AuthRouter);
   app.use("/user", UserRouter);
   app.use("/item", ItemRouter);
+  app.use("/rental", RentalRouter);
   app.use("/review", ReviewRouter);
   app.use("/rental", RentalRouter);
 

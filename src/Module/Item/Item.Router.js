@@ -1,5 +1,5 @@
 import { Router } from "express";
-import multer from "multer";
+import multer from 'multer';
 import * as ItemController from "./Item.Controller.js";
 import { auth } from "../../MiddleWare/auth.js";
 import { EndPoints } from "./Item.Role.js";
@@ -10,24 +10,9 @@ import { storage } from "../../MiddleWare/imageUpload.js";
 const router = Router();
 const upload = multer({ storage });
 
-router.post(
-  "/createitem",
-  upload.single("image"),
-  auth(EndPoints.CreateItem),
-  validateSchema(schema.CreateItemSchema),
-  ItemController.CreateItem
-);
+router.post("/createitem",upload.single("image"),auth(EndPoints.CreateItem),validateSchema(schema.CreateItemSchema),ItemController.CreateItem);
 router.get("/getitems", auth(EndPoints.GetItems), ItemController.GetItems);
-router.put(
-  "/updateitem/:id",
-  Validation(schema.CreateItemSchema),
-  auth(EndPoints.CreateItem),
-  ItemController.UpdateItem
-);
-router.delete(
-  "/deleteitem/:id",
-  auth(EndPoints.CreateItem),
-  ItemController.DeleteItem
-);
+router.put("/updateitem/:id",Validation(schema.CreateItemSchema),auth(EndPoints.CreateItem),ItemController.UpdateItem);
+router.delete("/deleteitem/:id",auth(EndPoints.CreateItem),ItemController.DeleteItem);
 
 export default router;
