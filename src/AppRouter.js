@@ -20,6 +20,7 @@ export const initApp = (app, express) => {
   app.use("/item", ItemRouter);
   app.use("/rental", RentalRouter);
   app.use("/review", ReviewRouter);
+  app.use("/rental", RentalRouter);
 
   app.use("*", (req, res) => {
     return res.json({ message: "Page Not Found" }); // end point not found
