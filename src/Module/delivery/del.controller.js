@@ -9,10 +9,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Create a new delivery entry and send notification email
 export const createDelivery = async (req, res) => {
   try {
-    const { rentalId, userId, tenantAddress, ownerAddress, deliveryAddress } = req.body;
+    const { rentalId, userId, tenantAddress, ownerAddress, deliveryAddress, deliveryMethod } = req.body;
 
     const newDelivery = await DeliveryModel.create({
       rentalId,
@@ -20,14 +19,14 @@ export const createDelivery = async (req, res) => {
       tenantAddress,
       ownerAddress,
       deliveryAddress,
+      deliveryMethod,
     });
 
-    // Send email to both tenant and owner
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: `${tenantAddress}, ${ownerAddress}`,
       subject: "Delivery Update - RentItOut",
-      text: `A new delivery is scheduled. Rental ID: ${rentalId}, Delivery Address: ${deliveryAddress}.`,
+      text: `A new delivery is scheduled:\n\n- Rental ID: ${rentalId}\n- Delivery Method: ${deliveryMethod}\n- Delivery Address: ${deliveryAddress}\n\nThank you for using RentItOut!`,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -40,6 +39,7 @@ export const createDelivery = async (req, res) => {
 
     res.status(201).json(newDelivery);
   } catch (error) {
+    console.error("Failed to create delivery:", error);
     res.status(500).json({ message: "Failed to create delivery", error: error.message });
   }
 };
