@@ -4,6 +4,7 @@ import UserRouter from "./Module/User/User.Router.js";
 import ItemRouter from "./Module/Item/Item.Router.js";
 import ReviewRouter from "./Module/Reviews/Review.Router.js";
 import RentalRouter from "./Module/Rental/Rental.Router.js";
+import PaymentRouter from "./Module/Payment/Payment.Router.js";
 
 import cors from "cors";
 
@@ -21,6 +22,7 @@ export const initApp = (app, express) => {
   app.use("/rental", RentalRouter);
   app.use("/review", ReviewRouter);
   app.use("/rental", RentalRouter);
+  app.use("/payment", PaymentRouter);
 
   app.use("*", (req, res) => {
     return res.json({ message: "Page Not Found" }); // end point not found

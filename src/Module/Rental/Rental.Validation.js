@@ -11,7 +11,6 @@ export const CreateRentalSchema = joi.object({
     "number.base": "RentalDays should be a valid number",
     "number.min": "RentalDays should be at least 1 day",
   }),
-
   // ItemTenant: joi.number().integer().required().messages({
   //   "any.required": "ItemTenant is required",
   //   "number.base": "ItemTenant should be a valid user ID",
@@ -24,14 +23,6 @@ export const UpdateRentalSchema = joi.object({
     "any.required": "rental ID is required",
     "number.base": "rental ID should be a valid number",
   }),
-  ItemTenant: joi.number().integer().required().messages({
-    "any.required": "ItemTenant is required",
-    "number.base": "ItemTenant should be a valid user ID",
-  }),
-});
-
-// Schema for updating 
-export const UpdateRentalSchema = joi.object({
   RentalDays: joi.number().integer().min(1).optional().messages({
     "number.base": "RentalDays should be a valid number",
     "number.min": "RentalDays should be at least 1 day",

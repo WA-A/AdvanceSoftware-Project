@@ -25,6 +25,7 @@
     "multer-storage-cloudinary": "^4.0.0",
     "mysql2": "^3.9.1",
     "nanoid": "^5.0.7",
-    "sequelize": "^6.37.0"
+    "sequelize": "^6.37.0",
+    "stripe": "^17.3.1"
   }
 }
