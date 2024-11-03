@@ -1,19 +1,12 @@
 import jwt from "jsonwebtoken";
 import UserModel from "./../Modle/UserModule.js";
 
-export const Roles = {
-  Admin: "Admin",
-  User: "User",
-};
-
 export const auth = (AccessRole = []) => {
   return async (req, res, next) => {
     const { authorization } = req.headers;
 
     if (!authorization || !authorization.startsWith(process.env.BEARERKEY)) {
-      return res
-        .status(401)
-        .json({ message: "Token missing or incorrect format" });
+      return res.status(401).json({ message: "Token missing or incorrect format" });
     }
 
     const token = authorization.replace(process.env.BEARERKEY, "").trim();
@@ -33,7 +26,6 @@ export const auth = (AccessRole = []) => {
       }
 
       req.user = authUser;
-      console.log("Authenticated User:", req.user);
       next();
     } catch (error) {
       return res.status(400).json({ message: "Invalid authorization" });

@@ -1,16 +1,18 @@
 import express from "express";
-import {
-  CreateDelivery,
-  UpdateDeliveryStatus,
-  GetUserDeliveries,
-  DeleteDelivery,
-} from "../Controllers/deliveryController.js"; 
+import { createDelivery } from "../controllers/DeliveryController.js";
+import auth from "../middlewares/auth.js";
+import roleValidation from "../middlewares/roleValidation.js";
+import validateDelivery from "../middlewares/validateDelivery.js";
+import { Roles } from "../middlewares/auth.js";
+
 const router = express.Router();
 
-// Routes
-router.post("/deliveries/:rentalId", CreateDelivery);
-router.put("/deliveries/:deliveryId/status", UpdateDeliveryStatus);
-router.get("/deliveries", GetUserDeliveries);
-router.delete("/deliveries/:deliveryId", DeleteDelivery);
+router.post(
+  "/deliveries",
+  auth([Roles.Admin, Roles.User]), // First, ensure the user is authenticated
+  roleValidation([Roles.Admin, Roles.User]), // Then, check if they have the correct role
+  validateDelivery, // Validation for required fields
+  createDelivery // Controller function to handle delivery creation
+);
 
 export default router;
