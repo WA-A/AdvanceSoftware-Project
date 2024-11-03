@@ -151,4 +151,3 @@ export const DeleteRental = async (req, res) => {
     res.status(500).json({ message: "Error deleting rental", error });
   }
 };
-
