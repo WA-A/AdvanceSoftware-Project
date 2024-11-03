@@ -1,49 +1,111 @@
-const db = require('c:/Users/ragha/Desktop/RentItOut/AdvanceSoftware-Project/src/Modle/ItemModel');
+import { DataTypes } from "sequelize";
+import sequelize from "../config/database.js"; // Adjust the path as necessary
+import nodemailer from "nodemailer";
 
+// Define Notification model
+const NotificationModel = sequelize.define("Notification", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  message: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
+});
+
+// Notification class
 class Notification {
-    // Send a notification
-    static sendNotification(userId, message, callback) {
-        const query = "INSERT INTO Notifications (user_id, message, created_at) VALUES (?, ?, NOW())";
-        db.query(query, [userId, message], (error, results) => {
-            if (error) {
-                return callback(error);
-            }
-            callback(null, results);
-        });
+  // Send a notification
+  static async sendNotification(userId, message) {
+    try {
+      // Save notification to the database
+      const notification = await NotificationModel.create({
+        userId,
+        message,
+      });
+      // Optionally send email notification
+      await this.sendEmailNotification(userId, message);
+      return notification;
+    } catch (error) {
+      throw new Error("Error sending notification: " + error.message);
+    }
+  }
+
+  // Get all notifications for a user
+  static async getUserNotifications(userId) {
+    try {
+      return await NotificationModel.findAll({
+        where: { userId },
+        order: [["createdAt", "DESC"]],
+      });
+    } catch (error) {
+      throw new Error("Error retrieving notifications: " + error.message);
+    }
+  }
+
+  // Delete a notification
+  static async deleteNotification(notificationId) {
+    try {
+      const result = await NotificationModel.destroy({
+        where: { id: notificationId },
+      });
+      return result;
+    } catch (error) {
+      throw new Error("Error deleting notification: " + error.message);
+    }
+  }
+
+  // Optional: Update notification status
+  static async updateNotificationStatus(notificationId, status) {
+    try {
+      const result = await NotificationModel.update(
+        { status },
+        { where: { id: notificationId } }
+      );
+      return result;
+    } catch (error) {
+      throw new Error("Error updating notification status: " + error.message);
+    }
+  }
+
+  // Send email notification
+  static async sendEmailNotification(userId, message) {
+    // Fetch user email from your user model (assumed to be implemented)
+    const user = await UserModel.findByPk(userId);
+    if (!user || !user.email) {
+      throw new Error("User not found or email missing");
     }
 
-    // Get all notifications for a user
-    static getUserNotifications(userId, callback) {
-        const query = "SELECT * FROM Notifications WHERE user_id = ? ORDER BY created_at DESC";
-        db.query(query, [userId], (error, results) => {
-            if (error) {
-                return callback(error);
-            }
-            callback(null, results);
-        });
-    }
+    // Configure nodemailer
+    const transporter = nodemailer.createTransport({
+      service: "Gmail", // or your email service
+      auth: {
+        user: process.env.EMAIL_USER, // Your email address
+        pass: process.env.EMAIL_PASS, // Your email password or app-specific password
+      },
+    });
 
-    // Delete a notification
-    static deleteNotification(notificationId, callback) {
-        const query = "DELETE FROM Notifications WHERE id = ?";
-        db.query(query, [notificationId], (error, results) => {
-            if (error) {
-                return callback(error);
-            }
-            callback(null, results);
-        });
-    }
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: user.email,
+      subject: "New Notification",
+      text: message,
+    };
 
-    // Update notification status (optional)
-    static updateNotificationStatus(notificationId, status, callback) {
-        const query = "UPDATE Notifications SET status = ? WHERE id = ?";
-        db.query(query, [status, notificationId], (error, results) => {
-            if (error) {
-                return callback(error);
-            }
-            callback(null, results);
-        });
-    }
+    // Send email
+    return transporter.sendMail(mailOptions);
+  }
 }
 
-module.exports = Notification;
+export default Notification;
