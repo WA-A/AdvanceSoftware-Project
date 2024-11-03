@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/database.js"; 
+import sequelize from "../config/database.js";
 
 const DeliveryModel = sequelize.define("Delivery", {
   id: {
@@ -19,6 +19,14 @@ const DeliveryModel = sequelize.define("Delivery", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  tenantAddress: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  ownerAddress: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   deliveryAddress: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -34,10 +42,5 @@ const DeliveryModel = sequelize.define("Delivery", {
     defaultValue: DataTypes.NOW,
   },
 });
-
-// Associations
-DeliveryModel.associate = (models) => {
-  DeliveryModel.belongsTo(models.Rental, { foreignKey: "rentalId", as: "rental" });
-};
 
 export default DeliveryModel;

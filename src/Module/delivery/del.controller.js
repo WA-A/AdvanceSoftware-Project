@@ -1,86 +1,45 @@
-import DeliveryModel from "../../Modle/DeliveryModel.js";
-import RentalModel from "../../Modle/RentalModel.js";
+import DeliveryModel from "../Modle/DeliveryModel.js";
+import nodemailer from "nodemailer";
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
-export const CreateDelivery = async (req, res) => {
+// Create a new delivery entry and send notification email
+export const createDelivery = async (req, res) => {
   try {
-    const { rentalId } = req.params;
-    const { deliveryAddress } = req.body;
-    const userId = req.user.id;
-
-    const rental = await RentalModel.findByPk(rentalId);
-    if (!rental) {
-      return res.status(404).json({ message: "Rental not found" });
-    }
+    const { rentalId, userId, tenantAddress, ownerAddress, deliveryAddress } = req.body;
 
     const newDelivery = await DeliveryModel.create({
       rentalId,
       userId,
+      tenantAddress,
+      ownerAddress,
       deliveryAddress,
-      deliveryStatus: "Pending",
     });
 
-    res.status(201).json({ message: "Delivery created successfully", newDelivery });
-  } catch (error) {
-    console.error("Error creating delivery:", error);
-    res.status(500).json({ message: "Error creating delivery", error: error.message });
-  }
-};
+    // Send email to both tenant and owner
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: `${tenantAddress}, ${ownerAddress}`,
+      subject: "Delivery Update - RentItOut",
+      text: `A new delivery is scheduled. Rental ID: ${rentalId}, Delivery Address: ${deliveryAddress}.`,
+    };
 
-// Update Delivery Status
-export const UpdateDeliveryStatus = async (req, res) => {
-  try {
-    const { deliveryId } = req.params;
-    const { deliveryStatus } = req.body;
-
-    const delivery = await DeliveryModel.findByPk(deliveryId);
-    if (!delivery) {
-      return res.status(404).json({ message: "Delivery not found" });
-    }
-
-    delivery.deliveryStatus = deliveryStatus;
-    await delivery.save();
-
-    res.status(200).json({ message: "Delivery status updated successfully", delivery });
-  } catch (error) {
-    console.error("Error updating delivery:", error);
-    res.status(500).json({ message: "Error updating delivery status", error: error.message });
-  }
-};
-
-// Get Deliveries for a User
-export const GetUserDeliveries = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const deliveries = await DeliveryModel.findAll({
-      where: { userId },
-      include: [{ model: RentalModel, as: "rental" }],
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending email:", error);
+      } else {
+        console.log("Email sent:", info.response);
+      }
     });
 
-    if (deliveries.length === 0) {
-      return res.status(404).json({ message: "No deliveries found for this user" });
-    }
-
-    res.status(200).json(deliveries);
+    res.status(201).json(newDelivery);
   } catch (error) {
-    console.error("Error fetching deliveries:", error);
-    res.status(500).json({ message: "Error fetching deliveries", error: error.message });
-  }
-};
-
-// Delete Delivery
-export const DeleteDelivery = async (req, res) => {
-  try {
-    const { deliveryId } = req.params;
-    const delivery = await DeliveryModel.findByPk(deliveryId);
-    if (!delivery) {
-      return res.status(404).json({ message: "Delivery not found" });
-    }
-
-    await delivery.destroy();
-    res.status(200).json({ message: "Delivery deleted successfully" });
-  } catch (error) {
-    console.error("Error deleting delivery:", error);
-    res.status(500).json({ message: "Error deleting delivery", error: error.message });
+    res.status(500).json({ message: "Failed to create delivery", error: error.message });
   }
 };

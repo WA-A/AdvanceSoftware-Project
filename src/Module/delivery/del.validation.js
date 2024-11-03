@@ -1,13 +1,9 @@
-import { body, validationResult } from "express-validator";
+export const validateDelivery = (req, res, next) => {
+  const { rentalId, userId, tenantAddress, ownerAddress, deliveryAddress } = req.body;
 
-export const validateDeliveryCreation = [
-  body("deliveryAddress").notEmpty().withMessage("Delivery address is required"),
-  
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  },
-];
+  if (!rentalId || !userId || !tenantAddress || !ownerAddress || !deliveryAddress) {
+    return res.status(400).json({ message: "Missing required delivery information" });
+  }
+
+  next();
+};
