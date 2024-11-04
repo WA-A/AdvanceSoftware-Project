@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/database.js"; // Update the path as necessary
-
+import sequelize from "../config/database.js"; 
 const DeliveryModel = sequelize.define("Delivery", {
   id: {
     type: DataTypes.INTEGER,
@@ -11,7 +10,7 @@ const DeliveryModel = sequelize.define("Delivery", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "Rentals", // Assuming you have a Rentals model defined
+      model: "Rentals", 
       key: "id",
     },
   },
@@ -57,6 +56,7 @@ const DeliveryModel = sequelize.define("Delivery", {
   },
 });
 
+// Custom method to get deliveries by user ID
 DeliveryModel.getDeliveriesByUserId = async function (userId) {
   return await this.findAll({
     where: {
@@ -65,7 +65,7 @@ DeliveryModel.getDeliveriesByUserId = async function (userId) {
   });
 };
 
-
+// Custom method to update delivery status
 DeliveryModel.updateDeliveryStatus = async function (deliveryId, newStatus) {
   return await this.update(
     { deliveryStatus: newStatus },
@@ -73,5 +73,12 @@ DeliveryModel.updateDeliveryStatus = async function (deliveryId, newStatus) {
   );
 };
 
+// Custom method to update payment status
+DeliveryModel.updatePaymentStatus = async function (deliveryId, newStatus) {
+  return await this.update(
+    { paymentStatus: newStatus },
+    { where: { id: deliveryId } }
+  );
+};
 
 export default DeliveryModel;
