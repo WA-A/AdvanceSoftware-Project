@@ -57,4 +57,21 @@ const DeliveryModel = sequelize.define("Delivery", {
   },
 });
 
+DeliveryModel.getDeliveriesByUserId = async function (userId) {
+  return await this.findAll({
+    where: {
+      userId,
+    },
+  });
+};
+
+
+DeliveryModel.updateDeliveryStatus = async function (deliveryId, newStatus) {
+  return await this.update(
+    { deliveryStatus: newStatus },
+    { where: { id: deliveryId } }
+  );
+};
+
+
 export default DeliveryModel;
