@@ -7,7 +7,7 @@ import { validateDelivery } from '../middlewares/deliveryValidation.js';
 
 const router = express.Router();
 
-// Route to create a new delivery with input validation
+
 router.post(
   "/deliveries",
   roleValidation([Roles.Admin, Roles.User]),

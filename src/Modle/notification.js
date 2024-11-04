@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/database.js"; // Adjust the path as necessary
+import sequelize from "../config/database.js"; 
 import nodemailer from "nodemailer";
 
-// Define Notification model
+
 const NotificationModel = sequelize.define("Notification", {
   id: {
     type: DataTypes.INTEGER,
@@ -89,7 +89,7 @@ class Notification {
 
     // Configure nodemailer
     const transporter = nodemailer.createTransport({
-      service: "Gmail", // or your email service
+      service: "Gmail", 
       auth: {
         user: process.env.EMAIL_USER, // Your email address
         pass: process.env.EMAIL_PASS, // Your email password or app-specific password
