@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/database.js"; 
+import sequelize from "../config/database.js";
+
 const DeliveryModel = sequelize.define("Delivery", {
   id: {
     type: DataTypes.INTEGER,
@@ -10,7 +11,7 @@ const DeliveryModel = sequelize.define("Delivery", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "Rentals", 
+      model: "Rentals",
       key: "id",
     },
   },
@@ -79,6 +80,13 @@ DeliveryModel.updatePaymentStatus = async function (deliveryId, newStatus) {
     { paymentStatus: newStatus },
     { where: { id: deliveryId } }
   );
+};
+
+// Custom method to update delivery details
+DeliveryModel.updateDeliveryDetails = async function (deliveryId, updatedFields) {
+  return await this.update(updatedFields, {
+    where: { id: deliveryId },
+  });
 };
 
 export default DeliveryModel;
