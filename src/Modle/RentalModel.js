@@ -45,13 +45,13 @@ const RentalModel = sequelize.define(
     },
     Status: {
       type: DataTypes.ENUM,
-      values: ["pending", "confirmed", "completed", "cancelled"],
+      values: ["pending", "confirmed", "cancelled"],
       defaultValue: "pending",
       allowNull: false,
     },
     PaymentStatus: {
       type: DataTypes.STRING,
-      defaultValue: "unpaid", // possible values: "unpaid", "paid", "refunded"
+      defaultValue: "unpaid", // possible values: "unpaid", "paid"
     },
   },
   {
