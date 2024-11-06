@@ -34,10 +34,6 @@ const ItemModel = sequelize.define(
       values: ["Available", "Rented"],
       defaultValue: "Available",
     },
-    // RentalDays: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    // },
     Image: {
       type: DataTypes.STRING,
     },

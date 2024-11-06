@@ -1,6 +1,5 @@
 import { Router } from "express";
 import * as RentalController from "./Rental.Controller.js";
-import { CheckEmail } from "../../MiddleWare/CheckEmail.js";
 import { Validation } from "../../MiddleWare/Validation.js";
 import * as schema from "./Rental.Validation.js";
 import { auth } from "../../MiddleWare/auth.js";
@@ -29,6 +28,11 @@ router.delete(
   "/delete-rental/:rentalId",
   auth(EndPoints.CreateRental),
   RentalController.DeleteRental
+);
+router.put(
+  "/confirm-rental/:rentalId",
+  auth(EndPoints.ConfirmRental),
+  RentalController.ConfirmRentalByOwner
 );
 
 export default router;

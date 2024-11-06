@@ -3,11 +3,14 @@ import PaymentModel from "../../Modle/PaymentModel.js";
 import stripe from "../../../config/stripeConfig.js";
 
 export const CreatePayment = async (req, res) => {
-  const { rentalId } = req.params;
-
   try {
+    const { rentalId } = req.params;
     const rental = await RentalModel.findByPk(rentalId);
     if (!rental) return res.status(404).json({ message: "Rental not found" });
+    if (rental.Status !== "Confirmed")
+      return res
+        .status(404)
+        .json({ message: "Rental hasn't been confirmed by the Owner." });
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
