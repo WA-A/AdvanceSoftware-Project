@@ -42,7 +42,7 @@ RentItOut allows individuals to lend and borrow everyday items, making the shari
 
 1. *Sign up*: 📝 Create an account to either rent or lend items.
 2. *Browse & Choose*: 🔍 Find the item you need, select the rental duration, and get an instant cost estimate.
-3. *Rent & Pay: 💳 Confirm your rental and complete the secure transaction via **Stripe*.
+3. *Rent & Pay*: 💳 Confirm your rental and complete the secure transaction via *Stripe*.
 
 ---
 
