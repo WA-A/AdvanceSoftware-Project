@@ -1,7 +1,7 @@
 # AdvanceSoftware-Project
 # 🏡 Welcome to RentItOut - Your Hub for Hassle-Free Sharing! 🌍
 
-Imagine a world where everyday items are just a tap away. With RentItOut, the sharing economy comes to life, creating a community of neighbors sharing tools, equipment, and essentials securely and conveniently. Whether you're a lender or borrower, our platform makes it all seamless, backed by *Node.js, **Express, **Stripe, and **MySQL*.
+Imagine a world where everyday items are just a tap away. With RentItOut, the sharing economy comes to life, creating a community of neighbors sharing tools, equipment, and essentials securely and conveniently. Whether you're a lender or borrower, our platform makes it all seamless, backed by *Node.js, Express, Stripe, and MySQL*.
 
 ---
 
@@ -27,8 +27,6 @@ RentItOut allows individuals to lend and borrow everyday items, making the shari
 
 
 
----
-
 <!--## 💬 Where Users Can Get Help
 
 - *Documentation*: 📚 Visit our [official documentation](#) for detailed guides.
@@ -39,13 +37,16 @@ RentItOut allows individuals to lend and borrow everyday items, making the shari
 
 ## 💻 Technologies Used
 
-- *Backend: 🌲 **Node.js, **Express*
-- *Database: 📊 **MySQL*
-- *Authentication: 🔐 **JSON Web Tokens (JWT)*
-- *Payments: 💳 **Stripe Integration*
-- *Postman: 📡 **API Testing Server*
-- *GitHub: 🔧 **Version Control Platform, Code Repository*
+- *Visual Studio Code : Code Editor– used for writing and managing project code.*
+- *Backend: 🌲 Node.js, Express*
+- *Database: 📊 MySQL*
+- *Authentication: 🔐 JSON Web Tokens (JWT)*
+- *Payments: 💳 Stripe Integration*
+- *Postman: 📡 API Testing Server*
+- *GitHub: 🔧 Version Control Platform, Code Repository*
 
+
+---
 - ## 🤝 Join Us with RentItOut
 
 Help us create a more sustainable, connected world through sharing. Build stronger communities, one rental at a time
