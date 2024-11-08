@@ -279,7 +279,6 @@ export const CreatDamageAmount = async (req, res) => {
 
     // تحديث قيمة الأضرار
     rental.damageAmount += damageAmount;
-    rental.FinalCost += damageAmount;
     await rental.save();
 
     const tenant = await UserModel.findByPk(rental.ItemTenant);
