@@ -53,16 +53,16 @@ RentItOut allows individuals to lend and borrow everyday items, making the shari
 
 ## 💻 Technologies Used
 
-- *Visual Studio Code : 🖊️ Code Editor– used for writing and managing project code.*
+- *Visual Studio Code : 🖊️ Code Editor – used for writing and managing project code.*
 - *Backend: 🌲 Node.js, Express.js*
 - *Database: 📊 MySQL with ORM (Sequelize)*
 - *Authentication: 🔐 JSON Web Tokens (JWT)*
 - *Payments: 💳 Stripe Integration*
 - *Postman: 📡 API Testing Server*
-- *GitHub: 🔧 Version Control Platform, Code Repository*
+- *GitHub: 🔧 Version Control Platform -Code Repository*
 
 
 ---
 - ## 🤝 Join Us with RentItOut
 
-Help us create a more sustainable, connected world through sharing. Build stronger communities, one rental at a time🔥
+Help us create a more sustainable, connected world through sharing. Build stronger communities, one rental at a time
