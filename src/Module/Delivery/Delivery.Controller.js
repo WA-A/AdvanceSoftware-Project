@@ -13,6 +13,9 @@ export const createDelivery = async (req, res) => {
     if (!rental) {
       return res.status(404).json({ message: "Rental not found" });
     }
+    if (rental.PaymentStatus !== "paid") {
+      return res.status(400).json({ message: "Rental has not been paid" });
+    }
 
     const newDelivery = await DeliveryModel.create({
       rentalId,
