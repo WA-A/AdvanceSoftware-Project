@@ -62,10 +62,10 @@ RentItOut allows individuals to lend and borrow everyday items, making the shari
 
 ---
 ### 🔗 External APIs:
-- *💳 Stripe*: for handling secure payments.
-- *📤 SendEmail*: for sending notifications and alerts via email.
-- *🔔 Notification Service*: for real-time user notifications.
-- *📸 Cloudinary*: for media storage and image management.
+- * Stripe 💳: for handling secure payments.*
+- * SendEmail 📤: for sending notifications and alerts via email.*
+- * Notification Service 🔔: for real-time user notifications.*
+- *📸 Cloudinary 📸: for media storage and image management.*
 
 ---
 - ## 🤝 Join Us with RentItOut
