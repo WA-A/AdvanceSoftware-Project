@@ -1,8 +1,7 @@
 import { sequelize } from "../../DB/Connection.js";
 import { DataTypes } from "sequelize";
 
-const RentalModel = sequelize.define(
-  "Rental",
+const RentalModel = sequelize.define("Rental",
   {
     RentalDays: {
       type: DataTypes.INTEGER,

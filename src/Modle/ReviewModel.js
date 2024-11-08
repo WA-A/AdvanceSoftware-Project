@@ -1,8 +1,7 @@
 import { sequelize } from "../../DB/Connection.js";
 import { DataTypes } from "sequelize";
 
-const ReviewModel = sequelize.define(
-  "Review",
+const ReviewModel = sequelize.define("Review",
   {
     ReviewText: {
       type: DataTypes.STRING,
