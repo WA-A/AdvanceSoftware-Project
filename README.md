@@ -47,7 +47,7 @@ RentItOut allows individuals to lend and borrow everyday items, making the shari
 ---
 
 ## 💬 Explore Project Resources
-- Postman Documentation: 📚 Dive into our https://www.postman.com/solar-robot-224165/advance-software-project/documentation/mppbwcb/advancesoftware-project?workspaceId=68fc8633-42c7-41f8-82c4-7a3d381441fb to test and interact with our API effortlessly. It provides a comprehensive overview of all available endpoints, request formats, and expected responses—perfect for developers and testers.
+- Postman Documentation: 📚 Dive into our https://www.postman.com/solar-robot-224165/advance-software-project/documentation/mppbwcb/advancesoftware-project?workspaceId=68fc8633-42c7-41f8-82c4-7a3d381441fb to test and interact with our API effortlessly. It provides a comprehensive overview of all available endpoints, request formats, and expected responses.
 ---
 
 
