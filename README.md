@@ -61,11 +61,11 @@ RentItOut allows individuals to lend and borrow everyday items, making the shari
 - *GitHub: 🔧 Version Control Platform -Code Repository*
 
 ---
-### 🔗 External APIs:
-- * Stripe 💳: for handling secure payments.*
-- * SendEmail 📤: for sending notifications and alerts via email.*
-- * Notification Service 🔔: for real-time user notifications.*
-- *📸 Cloudinary 📸: for media storage and image management.*
+### 🔗 External APIs
+- * Stripe: 💳 for handling secure payments.*
+- * SendEmail: 📤 for sending notifications and alerts via email.*
+- * Notification Service: 🔔 for real-time user notifications.*
+- * Cloudinary: 📸 for media storage and image management.*
 
 ---
 - ## 🤝 Join Us with RentItOut
