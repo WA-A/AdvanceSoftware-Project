@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/database.js";
+import sequelize from "../../DB/Connection.js";
 import nodemailer from "nodemailer";
+import UserModel from "./UserModule.js"; // استيراد نموذج المستخدم لجلب البريد الإلكتروني
 
 const NotificationModel = sequelize.define("Notification", {
   userId: {
@@ -11,6 +12,11 @@ const NotificationModel = sequelize.define("Notification", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "unread", // الحالة الافتراضية هي "غير مقروء"
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
@@ -20,23 +26,25 @@ const NotificationModel = sequelize.define("Notification", {
 
 // Notification class
 class Notification {
-  // Send a notification
+  // إرسال إشعار
   static async sendNotification(userId, message) {
     try {
-      // Save notification to the database
+      // حفظ الإشعار في قاعدة البيانات
       const notification = await NotificationModel.create({
         userId,
         message,
       });
-      // Optionally send email notification
+
+      // إرسال بريد إلكتروني اختياري
       await this.sendEmailNotification(userId, message);
+
       return notification;
     } catch (error) {
       throw new Error("Error sending notification: " + error.message);
     }
   }
 
-  // Get all notifications for a user
+  // الحصول على جميع الإشعارات لمستخدم
   static async getUserNotifications(userId) {
     try {
       return await NotificationModel.findAll({
@@ -48,57 +56,62 @@ class Notification {
     }
   }
 
-  // Delete a notification
+  // حذف إشعار
   static async deleteNotification(notificationId) {
     try {
       const result = await NotificationModel.destroy({
         where: { id: notificationId },
       });
-      return result;
+      return result > 0;
     } catch (error) {
       throw new Error("Error deleting notification: " + error.message);
     }
   }
 
-  // Optional: Update notification status
+  // تحديث حالة الإشعار
   static async updateNotificationStatus(notificationId, status) {
     try {
-      const result = await NotificationModel.update(
+      const [updatedRows] = await NotificationModel.update(
         { status },
         { where: { id: notificationId } }
       );
-      return result;
+      return updatedRows > 0;
     } catch (error) {
       throw new Error("Error updating notification status: " + error.message);
     }
   }
 
-  // Send email notification
+  // إرسال بريد إلكتروني للإشعار
   static async sendEmailNotification(userId, message) {
-    // Fetch user email from your user model (assumed to be implemented)
-    const user = await UserModel.findByPk(userId);
-    if (!user || !user.email) {
-      throw new Error("User not found or email missing");
+    try {
+      // جلب البريد الإلكتروني للمستخدم
+      const user = await UserModel.findByPk(userId);
+      if (!user || !user.email) {
+        throw new Error("User not found or email missing");
+      }
+
+      // إعداد nodemailer
+      const transporter = nodemailer.createTransport({
+        service: "Gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: user.email,
+        subject: "New Notification",
+        text: message,
+      };
+
+      // إرسال البريد الإلكتروني
+      await transporter.sendMail(mailOptions);
+    } catch (error) {
+      console.error("Error sending email notification:", error.message);
+      throw new Error("Failed to send email notification");
     }
-
-    // Configure nodemailer
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: process.env.EMAIL_USER, // Your email address
-        pass: process.env.EMAIL_PASS, // Your email password or app-specific password
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: user.email,
-      subject: "New Notification",
-      text: message,
-    };
-
-    // Send email
-    return transporter.sendMail(mailOptions);
   }
 }
 

@@ -35,4 +35,10 @@ router.put(
   RentalController.ConfirmRentalByOwner
 );
 
+router.post(
+  "/create-rental-damage/:rentalId",
+  auth(EndPoints.ConfirmRental),
+  RentalController.CreatDamageAmount
+);
+
 export default router;

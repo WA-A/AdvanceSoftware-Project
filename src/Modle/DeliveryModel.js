@@ -29,11 +29,7 @@ const DeliveryModel = sequelize.define("Delivery", {
   },
   deliveryAddress: {
     type: DataTypes.STRING,
-    allowNull: true, // Required if "Third-Party" is selected
-  },
-  meetUpLocation: {
-    type: DataTypes.STRING,
-    allowNull: true, // Used for "Meet-Up"
+    allowNull: true,
   },
   deliveryStatus: {
     type: DataTypes.ENUM("Pending", "In Transit", "Delivered"),
@@ -51,40 +47,5 @@ const DeliveryModel = sequelize.define("Delivery", {
     defaultValue: DataTypes.NOW,
   },
 });
-
-// Custom method to get deliveries by user ID
-// DeliveryModel.getDeliveriesByUserId = async function (userId) {
-//   return await this.findAll({
-//     where: {
-//       userId,
-//     },
-//   });
-// };
-
-// // Custom method to update delivery status
-// DeliveryModel.updateDeliveryStatus = async function (deliveryId, newStatus) {
-//   return await this.update(
-//     { deliveryStatus: newStatus },
-//     { where: { id: deliveryId } }
-//   );
-// };
-
-// // Custom method to update payment status
-// DeliveryModel.updatePaymentStatus = async function (deliveryId, newStatus) {
-//   return await this.update(
-//     { paymentStatus: newStatus },
-//     { where: { id: deliveryId } }
-//   );
-// };
-
-// // Custom method to update delivery details
-// DeliveryModel.updateDeliveryDetails = async function (
-//   deliveryId,
-//   updatedFields
-// ) {
-//   return await this.update(updatedFields, {
-//     where: { id: deliveryId },
-//   });
-// };
 
 export default DeliveryModel;

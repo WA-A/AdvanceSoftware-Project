@@ -36,6 +36,14 @@ const RentalModel = sequelize.define(
         key: "id",
       },
     },
+    damageAmount: {
+      type: DataTypes.FLOAT,
+      defaultValue: 0,
+      allowNull: false,
+      validate: {
+        min: 0,
+      },
+    },
     FinalCost: {
       type: DataTypes.FLOAT,
       allowNull: false,

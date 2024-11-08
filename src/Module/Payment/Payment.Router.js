@@ -18,14 +18,17 @@ router.get(
   PaymentController.PaymentSuccess
 );
 
-router.post("/webhooks", PaymentController.Webhooks);
+router.post(
+  "/create-payment-for-damage/:rentalId",
+  auth(EndPoints.CreatePayment),
+  PaymentController.CreatePaymentForPreviousDamages
+  //PaymentController.SendPaymentNotification
+);
 
 router.get(
-  "/get-payment-status/:paymentId",
-  auth(EndPoints.GetPaymentStatus),
-  PaymentController.GetPaymentStatus
-  // PaymentController.SendPaymentStatusNotification
-  // If you want to send email or SMS notification, you need to add corresponding code here
+  "/payment-for-damage-success",
+  auth(EndPoints.GetPayment),
+  PaymentController.PaymentSuccessForPreviousDamages
 );
 
 export default router;

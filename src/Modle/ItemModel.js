@@ -31,7 +31,7 @@ const ItemModel = sequelize.define(
     },
     Status: {
       type: DataTypes.ENUM,
-      values: ["Available", "Rented"],
+      values: ["Available", "Pending", "Rented"],
       defaultValue: "Available",
     },
     Image: {

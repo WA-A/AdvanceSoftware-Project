@@ -7,6 +7,28 @@ import { Op } from "sequelize";
 RentalModel.belongsTo(ItemModel, { foreignKey: "Item", as: "item" });
 ItemModel.hasMany(RentalModel, { foreignKey: "Item", as: "rentals" });
 
+// get all previous rentals by the user and check if there is a damageAmount not equal to zero
+const getPreviousDamages = async (userId) => {
+  const previousDamages = await RentalModel.findAll({
+    where: {
+      ItemTenant: userId,
+      DamageAmount: { [Op.not]: 0 },
+    },
+    attributes: ["DamageAmount"],
+    order: [["CreatedAt", "DESC"]],
+  });
+
+  console.log(previousDamages);
+  console.log(previousDamages.length);
+
+  //return true if the damage amount is greater than zero
+  if (previousDamages.length > 0) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 // Create New Rental
 export const CreateRental = async (req, res) => {
   try {
@@ -14,14 +36,24 @@ export const CreateRental = async (req, res) => {
     const { RentalDays } = req.body;
     const ItemTenant = req.user.id;
 
+    const previousDamages = await getPreviousDamages(ItemTenant);
+    console.log(previousDamages);
+
+    if (previousDamages) {
+      return res.status(400).json({
+        message:
+          "You have previous damages, please pay for rental and damages separately",
+      });
+    }
+
     const item = await ItemModel.findByPk(itemId);
     if (!item) {
       return res.status(404).json({ message: "Item not found" });
     }
     // Check if item is available for renting
-    if (item.Status == "Rented") {
+    if (item.Status !== "Available") {
       return res.status(404).json({
-        message: "Item Unavailable because its currently unavailable",
+        message: "Item Unavailable for Renting",
       });
     }
     if (!RentalDays || !ItemTenant) {
@@ -208,7 +240,7 @@ export const ConfirmRentalByOwner = async (req, res) => {
     // Update the Item status to Rented
     const item = await ItemModel.findByPk(rental.Item);
     if (item) {
-      item.Status = "Rented";
+      item.Status = "Pending";
       await item.save();
     }
     // Send email to notify the tenant that the rental has been confirmed
@@ -217,7 +249,7 @@ export const ConfirmRentalByOwner = async (req, res) => {
       await sendEmail(
         tenant.Email,
         "Rental Confirmed",
-        `Hello ${tenant.Name},\n\nYour rental request for the item "${item.NameItem}" has been confirmed. \nYou can now continue for Payment and Delivery.\n\nBest regards,\nYour Rental App`,
+        `Hello ${tenant.Name},\n\nYour rental request for the item "${item.NameItem}" has been confirmed.Your cost is ${rental.FinalCost}.\nYou can now continue for Payment and Delivery.\n\nBest regards,\nYour Rental App`,
         "Rental App",
         req.user.Email
       );
@@ -231,5 +263,43 @@ export const ConfirmRentalByOwner = async (req, res) => {
       message: "Error confirming rental by owner",
       error: error.message,
     });
+  }
+};
+
+// Create Damage Amount and Update Final Cost
+export const CreatDamageAmount = async (req, res) => {
+  try {
+    const { rentalId } = req.params;
+    const { damageAmount } = req.body;
+
+    const rental = await RentalModel.findByPk(rentalId);
+    if (!rental) {
+      return res.status(404).json({ message: "Rental not found" });
+    }
+
+    // تحديث قيمة الأضرار
+    rental.damageAmount += damageAmount;
+    rental.FinalCost += damageAmount;
+    await rental.save();
+
+    const tenant = await UserModel.findByPk(rental.ItemTenant);
+    if (!tenant || !tenant.Email) {
+      return res
+        .status(404)
+        .json({ message: "Tenant not found or email missing" });
+    }
+
+    await sendEmail(
+      tenant.Email,
+      "Damage Amount Notification",
+      `Dear ${tenant.Name},\n\nThe Owner has assessed a damage amount of ${damageAmount}.\nPlease pay your dues or you will be banned from renting again.\n\n`,
+      "Rental App",
+      "bookbliss24@gmail.com"
+    );
+    res
+      .status(200)
+      .json({ message: "Damage amount updated and email sent to the tenant" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
