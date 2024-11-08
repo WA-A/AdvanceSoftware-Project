@@ -18,6 +18,25 @@ RentItOut allows individuals to lend and borrow everyday items, making the shari
 - *For Communities*: 🌱 Promote sustainable consumption, reduce waste, and foster local connections.
 
 ---
+## 🌐 **Feature Highlights:**
+
+### 🔓 **Unlock Access, Anytime, Anywhere**
+- Join as an item owner or renter and start exploring a world of shared resources!
+- Easily set up your profile with custom notifications and secure settings.
+
+### ⚙️ **Smart, Instant Rental Matching**
+- Browse a curated list of everyday items, choose your rental duration, and see real-time cost estimates.
+- Item owners confirm each rental, ensuring every transaction is trusted and transparent.
+
+### 🖥️ **Control Hub for Admins**
+- Admins have full access to rental stats and user engagement metrics.
+- Manage profiles, verify listings, and maintain a high standard for safe community sharing.
+
+### 💵 **Effortless & Secure Transactions**
+- Our platform calculates payments automatically, handling all transactions through **Stripe**.
+- Enjoy peace of mind with fast, reliable, and secure payments for each rental.
+
+---
 
 ## 💡 How Users Can Get Started
 
@@ -46,4 +65,4 @@ RentItOut allows individuals to lend and borrow everyday items, making the shari
 ---
 - ## 🤝 Join Us with RentItOut
 
-Help us create a more sustainable, connected world through sharing. Build stronger communities, one rental at a time
+Help us create a more sustainable, connected world through sharing. Build stronger communities, one rental at a time 🔥
