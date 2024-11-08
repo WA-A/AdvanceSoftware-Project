@@ -1,8 +1,7 @@
 import { sequelize } from "../../DB/Connection.js";
 import { DataTypes } from "sequelize";
 
-const ItemModel = sequelize.define(
-  "Item",
+const ItemModel = sequelize.define("Item",
   {
     NameItem: {
       type: DataTypes.STRING,

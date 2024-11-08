@@ -1,8 +1,7 @@
 import { sequelize } from "../../DB/Connection.js";
 import { DataTypes } from "sequelize";
 
-const UserModel = sequelize.define(
-  "User",
+const UserModel = sequelize.define("User",
   {
     Name: {
       type: DataTypes.STRING(100),
