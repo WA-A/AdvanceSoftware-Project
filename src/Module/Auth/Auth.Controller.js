@@ -1,87 +1,132 @@
-import DeliveryModel from "../models/DeliveryModel.js"; // Adjust the import path as necessary
+import { where } from "sequelize";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { customAlphabet } from "nanoid";
+import UserModel from "../../Modle/UserModule.js";
+import dotenv from "dotenv";
+dotenv.config();
 
-// Create Delivery
-export const createDelivery = async (req, res) => {
+export const GetAuth = (req, res) => {
+  return res.json({ message: "Auth" });
+};
+export const Register = async (req, res) => {
   try {
-    const { rentalId, userId, tenantAddress, ownerAddress, deliveryAddress, deliveryMethod } = req.body;
+    const { Name, Email, Password, Address, PhoneNumber } = req.body;
+    const HashedPassword = bcrypt.hashSync(
+      Password,
+      parseInt(process.env.SALTROUND)
+    );
+    const InsertUser = await UserModel.create({
+      Name,
+      Email,
+      Password: HashedPassword,
+      Address,
+      PhoneNumber,
+    }); 
+    const token = jwt.sign({ Email }, process.env.CONFIRM_EMAILTOKEN);
 
-    const newDelivery = await DeliveryModel.create({
-      rentalId,
-      userId,
-      tenantAddress,
-      ownerAddress,
-      deliveryAddress,
-      deliveryMethod,
+    return res.json({ message: "success", InsertUser, status: 201 });
+  } catch (error) {
+    if (error.original?.errno == 1062) {
+      return res.json({ message: "email already exists" });
+    }
+    return res.json({ message: "error", error: error.stack });
+  }
+};
+
+export const Login = async (req, res) => {
+  try {
+    const { Email, Password } = req.body;
+    
+    const CheckUser = await UserModel.findOne({
+      attributes: ["id", "Name", "Password", "Role"], 
+      where: {
+        Email,
+      },
+    });
+    if (!CheckUser) {
+      return res
+        .status(401)
+        .json({ message: "Email or password is incorrect" });
+    }
+
+    
+    const Match = await bcrypt.compare(Password, CheckUser.Password);
+    if (!Match) {
+      return res
+        .status(401)
+        .json({ message: "Email or password is incorrect" });
+    }
+
+   
+    const Token = jwt.sign({ id: CheckUser.id }, process.env.LOGINSIG, {
+      expiresIn: "7d", 
     });
 
-    return res.status(201).json({ message: "Delivery created successfully", newDelivery });
-  } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error", error: error.message });
-  }
-};
-
-// Get Deliveries by User ID
-export const getDeliveriesByUserId = async (req, res) => {
-  const userId = req.params.userId;
-  try {
-    const deliveries = await DeliveryModel.getDeliveriesByUserId(userId);
-    if (deliveries.length === 0) {
-      return res.status(404).json({ message: "No deliveries found for this user" });
-    }
-    res.status(200).json(deliveries);
-  } catch (error) {
-    res.status(500).json({ message: "Internal Server Error", error: error.message });
-  }
-};
-
-// Update Delivery Details
-export const updateDeliveryDetails = async (req, res) => {
-  const { deliveryId } = req.params;
-  const updatedFields = req.body;
-
-  try {
-    const [updated] = await DeliveryModel.update(updatedFields, {
-      where: { id: deliveryId },
+    
+    return res.json({
+      message: "Login successful",
+      token: Token,
+      user: {
+        id: CheckUser.id,
+        Name: CheckUser.Name,
+        Role: CheckUser.Role, 
+      },
     });
-
-    if (updated) {
-      const updatedDelivery = await DeliveryModel.findByPk(deliveryId);
-      return res.status(200).json(updatedDelivery);
-    }
-    throw new Error("Delivery not found");
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error", error: error.message });
+    console.error("Error: ", error);
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
 
-// Update Delivery Status
-export const updateDeliveryStatus = async (req, res) => {
-  const { deliveryId } = req.params;
-  const { newStatus } = req.body;
-
+export const SendCode = async (req, res) => {
+  const { Email } = req.body;
+  const Code = customAlphabet("1234567890abcdef", 4)();
   try {
-    const updated = await DeliveryModel.updateDeliveryStatus(deliveryId, newStatus);
-    if (updated[0] === 0) {
-      return res.status(404).json({ message: "Delivery not found" });
+    const [updatedRows, updatedUser] = await UserModel.update(
+      { SendCode: Code },
+      {
+        where: { Email },
+        returning: true,
+      }
+    );
+    if (updatedRows === 0) {
+      return res.status(400).json({ message: "Email not found" });
     }
-    return res.status(200).json({ message: "Delivery status updated successfully" });
+    return res
+      .status(200)
+      .json({ message: "Success", user: updatedUser[0], Code });
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error", error: error.message });
+    console.error("Error: ", error);
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
 
-// Update Payment Status
-export const updatePaymentStatus = async (req, res) => {
-  const { deliveryId } = req.params;
-  const { newStatus } = req.body;
-
+export const ForgotPassword = async (req, res) => {
   try {
-    const updated = await DeliveryModel.updatePaymentStatus(deliveryId, newStatus);
-    if (updated[0] === 0) {
-      return res.status(404).json({ message: "Delivery not found" });
+    const { Email, Password, code } = req.body;
+    const userResult = await UserModel.findOne({ where: { Email } });
+
+    if (!userResult) {
+      return res.status(404).json({ message: "User not found" });
     }
-    return res.status(200).json({ message: "Payment status updated successfully" });
+    if (userResult.SendCode !== code) {
+      return res.status(400).json({ message: "Invalid code" });
+    }
+    const hashedPassword = await bcrypt.hash(
+      Password,
+      parseInt(process.env.SALTROUND)
+    );
+    await UserModel.update({ Password: hashedPassword }, { where: { Email } });
+    return res.status(200).json({ message: "Password updated successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error", error: error.message });
+    console.error("Error: ", error);
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
