@@ -7,27 +7,9 @@ import * as schema from "./Review.Validation.js";
 
 const router = Router();
 
-router.post(
-  "/create-review/:itemId",
-  auth(EndPoints.CreateReview),
-  Validation(schema.CreateReviewSchema),
-  ReviewController.CreateReview
-);
-router.put(
-  "/update-review/:reviewId",
-  auth(EndPoints.UpdateReview),
-  Validation(schema.CreateReviewSchema),
-  ReviewController.UpdateReview
-);
-router.delete(
-  "/delete-review/:reviewId",
-  auth(EndPoints.DeleteReview),
-  ReviewController.DeleteReview
-);
-router.get(
-  "/item-reviews/:itemId",
-  auth(EndPoints.GetItemReviews),
-  ReviewController.GetItemReviews
-);
+router.post("/create-review/:itemId",auth(EndPoints.CreateReview),Validation(schema.CreateReviewSchema),AsyncHandler(ReviewController.CreateReview));
+router.put("/update-review/:reviewId",auth(EndPoints.UpdateReview),Validation(schema.CreateReviewSchema),AsyncHandler(ReviewController.UpdateReview));
+router.delete("/delete-review/:reviewId",auth(EndPoints.DeleteReview),AsyncHandler(ReviewController.DeleteReview));
+router.get("/item-reviews/:itemId",auth(EndPoints.GetItemReviews),AsyncHandler(ReviewController.GetItemReviews));
 
 export default router;

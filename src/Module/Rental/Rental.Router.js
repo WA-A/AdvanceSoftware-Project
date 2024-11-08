@@ -7,38 +7,11 @@ import { EndPoints } from "./Rental.Role.js";
 
 const router = Router();
 
-router.post(
-  "/create-rental/:itemId",
-  Validation(schema.CreateRentalSchema),
-  auth(EndPoints.CreateRental),
-  RentalController.CreateRental
-);
-router.put(
-  "/update-rental/:rentalId",
-  Validation(schema.UpdateRentalSchema),
-  auth(EndPoints.CreateRental),
-  RentalController.UpdateRental
-);
-router.get(
-  "/get-rental",
-  auth(EndPoints.GetRental),
-  RentalController.GetUserRentals
-);
-router.delete(
-  "/delete-rental/:rentalId",
-  auth(EndPoints.CreateRental),
-  RentalController.DeleteRental
-);
-router.put(
-  "/confirm-rental/:rentalId",
-  auth(EndPoints.ConfirmRental),
-  RentalController.ConfirmRentalByOwner
-);
-
-router.post(
-  "/create-rental-damage/:rentalId",
-  auth(EndPoints.ConfirmRental),
-  RentalController.CreatDamageAmount
-);
+router.post("/create-rental/:itemId",Validation(schema.CreateRentalSchema),auth(EndPoints.CreateRental),AsyncHandler(RentalController.CreateRental));
+router.put("/update-rental/:rentalId",Validation(schema.UpdateRentalSchema),auth(EndPoints.CreateRental),AsyncHandler(RentalController.UpdateRental));
+router.get("/get-rental",auth(EndPoints.GetRental),AsyncHandler(RentalController.GetUserRentals));
+router.delete("/delete-rental/:rentalId",auth(EndPoints.CreateRental),AsyncHandler(RentalController.DeleteRental));
+router.put("/confirm-rental/:rentalId",auth(EndPoints.ConfirmRental),AsyncHandler(RentalController.ConfirmRentalByOwner));
+router.post("/create-rental-damage/:rentalId",auth(EndPoints.ConfirmRental),AsyncHandler(RentalController.CreatDamageAmount));
 
 export default router;
