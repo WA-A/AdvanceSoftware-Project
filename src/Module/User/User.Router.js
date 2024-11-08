@@ -5,7 +5,7 @@ import { EndPoints } from "./User.Role.js";
 const router = Router();
 
 
-router.get('/getuser',auth(EndPoints.GatUsers),UserController.GetUsers);
-router.get('/getdatauser',auth(EndPoints.UserData),UserController.GetDataUser);
+router.get('/getuser',auth(EndPoints.GatUsers),AsyncHandler(UserController.GetUsers));
+router.get('/getdatauser',auth(EndPoints.UserData),AsyncHandler(UserController.GetDataUser));
 
 export default router ;
